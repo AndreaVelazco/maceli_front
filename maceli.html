@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MACELI – Eat Fit</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #1C1C1C;
+    --dark: #3A3A3A;
+    --mid: #BFBFBF;
+    --light: #F5F5F5;
+    --accent: #D9A5A5;
+    --white: #ffffff;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black);
+    color: var(--light);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.4rem 5%;
+    background: rgba(28,28,28,0.88);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(217,165,165,0.12);
+    transition: padding .3s;
+  }
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.7rem; font-weight: 700; letter-spacing: .12em;
+    color: var(--light);
+    text-decoration: none;
+  }
+  .logo span { color: var(--accent); }
+
+  .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+  .nav-links a {
+    font-size: .82rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--mid); text-decoration: none;
+    transition: color .25s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-cta {
+    padding: .55rem 1.4rem;
+    border: 1px solid var(--accent); color: var(--accent);
+    background: transparent; font-family: 'DM Sans', sans-serif;
+    font-size: .8rem; letter-spacing: .1em; text-transform: uppercase;
+    cursor: pointer; text-decoration: none;
+    transition: background .25s, color .25s;
+    border-radius: 2px;
+  }
+  .nav-cta:hover { background: var(--accent); color: var(--black); }
+
+  /* hamburger */
+  .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .burger span { width: 26px; height: 2px; background: var(--light); transition: .3s; }
+  .mobile-menu {
+    display: none; flex-direction: column; gap: 1.4rem;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 99;
+    background: var(--black); align-items: center; justify-content: center;
+    padding: 2rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; color: var(--light); text-decoration: none; letter-spacing: .08em;
+    transition: color .2s;
+  }
+  .mobile-menu a:hover { color: var(--accent); }
+  .mobile-close {
+    position: absolute; top: 1.6rem; right: 5%;
+    font-size: 2rem; color: var(--mid); cursor: pointer; background: none; border: none;
+  }
+
+  /* ── HERO ── */
+  #inicio {
+    min-height: 100vh;
+    display: grid; place-items: center;
+    position: relative; overflow: hidden;
+    padding: 8rem 5% 5rem;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 70% 50%, rgba(217,165,165,0.08) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 80% at 20% 80%, rgba(217,165,165,0.04) 0%, transparent 60%);
+  }
+  .hero-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    position: relative; max-width: 1200px; width: 100%;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--accent); border: 1px solid rgba(217,165,165,0.35);
+    padding: .35rem 1rem; border-radius: 2px; margin-bottom: 1.6rem;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 600; line-height: 1.05;
+    color: var(--light); margin-bottom: 1.4rem;
+  }
+  .hero h1 em { color: var(--accent); font-style: normal; }
+  .hero p {
+    font-size: 1rem; line-height: 1.75; color: var(--mid);
+    max-width: 460px; margin-bottom: 2.4rem;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .btn-primary {
+    padding: .9rem 2rem; background: var(--accent); color: var(--black);
+    font-family: 'DM Sans', sans-serif; font-size: .82rem;
+    letter-spacing: .1em; text-transform: uppercase; border: none;
+    cursor: pointer; text-decoration: none; border-radius: 2px;
+    transition: opacity .25s, transform .2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { opacity: .88; transform: translateY(-2px); }
+
+  .btn-outline {
+    padding: .9rem 2rem; background: transparent;
+    border: 1px solid rgba(191,191,191,.4); color: var(--mid);
+    font-family: 'DM Sans', sans-serif; font-size: .82rem;
+    letter-spacing: .1em; text-transform: uppercase;
+    cursor: pointer; text-decoration: none; border-radius: 2px;
+    transition: border-color .25s, color .25s, transform .2s;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  /* hero visual */
+  .hero-visual {
+    position: relative; display: flex; align-items: center; justify-content: center;
+  }
+  .hero-plate {
+    width: clamp(260px, 38vw, 440px); aspect-ratio: 1;
+    border-radius: 50%; background: var(--dark);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8rem; position: relative;
+    box-shadow: 0 0 80px rgba(217,165,165,0.12), inset 0 0 40px rgba(0,0,0,.4);
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-18px)} }
+  .hero-badge {
+    position: absolute; bottom: 8%; right: -6%;
+    background: var(--black); border: 1px solid rgba(217,165,165,.3);
+    padding: .9rem 1.3rem; border-radius: 4px; text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,.5);
+  }
+  .hero-badge strong {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.9rem; color: var(--accent); display: block;
+  }
+  .hero-badge span { font-size: .72rem; letter-spacing: .08em; color: var(--mid); text-transform: uppercase; }
+
+  /* scroll line */
+  .scroll-line {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: .5rem;
+    font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--mid);
+  }
+  .scroll-line::after {
+    content: ''; width: 1px; height: 50px; background: linear-gradient(var(--accent), transparent);
+    animation: scrollpulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollpulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+  /* ── SECTION BASE ── */
+  section { padding: 7rem 5%; }
+  .section-label {
+    font-size: .72rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: .8rem;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight: 600; line-height: 1.1;
+    color: var(--light); margin-bottom: 1.2rem;
+  }
+  .section-sub {
+    font-size: .96rem; line-height: 1.8; color: var(--mid);
+    max-width: 560px;
+  }
+  .divider { width: 48px; height: 2px; background: var(--accent); margin: 1.6rem 0; }
+
+  /* ── SOBRE MACELI ── */
+  #sobre { background: var(--dark); }
+  .sobre-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .sobre-visual {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  }
+  .sobre-card {
+    background: var(--black); border-radius: 4px;
+    padding: 1.8rem 1.4rem; border: 1px solid rgba(217,165,165,0.1);
+    transition: border-color .3s, transform .3s;
+  }
+  .sobre-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .sobre-card:nth-child(2) { margin-top: 2rem; }
+  .sobre-card:nth-child(4) { margin-top: 2rem; }
+  .sobre-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .sobre-card h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem; color: var(--light); margin-bottom: .4rem;
+  }
+  .sobre-card p { font-size: .83rem; color: var(--mid); line-height: 1.65; }
+
+  .valores-list { margin-top: 2rem; display: flex; flex-direction: column; gap: .7rem; }
+  .valor-item {
+    display: flex; align-items: center; gap: .8rem;
+    font-size: .88rem; color: var(--mid);
+  }
+  .valor-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+  /* ── PLANES ── */
+  #planes { background: var(--black); }
+  .planes-header { max-width: 1100px; margin: 0 auto 4rem; }
+  .planes-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .plan-card {
+    border: 1px solid rgba(191,191,191,0.12);
+    border-radius: 4px; padding: 2.5rem 2rem;
+    background: var(--dark); position: relative;
+    transition: border-color .3s, transform .3s;
+    display: flex; flex-direction: column;
+  }
+  .plan-card:hover { border-color: var(--accent); transform: translateY(-6px); }
+  .plan-card.featured {
+    border-color: var(--accent);
+    background: linear-gradient(160deg, #3A3A3A 0%, #2a2020 100%);
+  }
+  .plan-badge-top {
+    position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+    background: var(--accent); color: var(--black);
+    font-size: .68rem; letter-spacing: .15em; text-transform: uppercase;
+    padding: .3rem 1rem; border-radius: 0 0 3px 3px;
+  }
+  .plan-icon { font-size: 2.4rem; margin-bottom: 1.2rem; }
+  .plan-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 600; color: var(--light); margin-bottom: .4rem;
+  }
+  .plan-desc { font-size: .83rem; color: var(--mid); line-height: 1.65; margin-bottom: 1.6rem; }
+  .plan-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem; font-weight: 700; color: var(--accent);
+    line-height: 1; margin-bottom: .3rem;
+  }
+  .plan-price-label { font-size: .75rem; color: var(--mid); margin-bottom: 1.8rem; }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: .65rem; flex-grow: 1; }
+  .plan-features li {
+    font-size: .84rem; color: var(--mid);
+    display: flex; align-items: center; gap: .7rem;
+  }
+  .plan-features li::before { content: '✓'; color: var(--accent); font-weight: 700; }
+  .plan-btn {
+    margin-top: 2rem; padding: .85rem; text-align: center;
+    border: 1px solid var(--accent); color: var(--accent);
+    background: transparent; font-family: 'DM Sans', sans-serif;
+    font-size: .8rem; letter-spacing: .1em; text-transform: uppercase;
+    cursor: pointer; text-decoration: none; border-radius: 2px;
+    transition: background .25s, color .25s;
+    display: block;
+  }
+  .plan-btn:hover, .plan-card.featured .plan-btn {
+    background: var(--accent); color: var(--black);
+  }
+  .plan-card.featured .plan-btn:hover { opacity: .85; }
+
+  /* PERSONALIZADO */
+  .plan-custom {
+    max-width: 1100px; margin: 2rem auto 0;
+    background: var(--dark); border: 1px solid rgba(217,165,165,0.15);
+    border-radius: 4px; padding: 2.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 2rem; flex-wrap: wrap;
+  }
+  .plan-custom h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; color: var(--light); margin-bottom: .4rem;
+  }
+  .plan-custom p { font-size: .88rem; color: var(--mid); max-width: 500px; }
+
+  /* ── BENEFICIOS ── */
+  #beneficios { background: var(--dark); }
+  .beneficios-inner { max-width: 1100px; margin: 0 auto; }
+  .beneficios-header { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: end; margin-bottom: 4rem; }
+  .beneficios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+  .bene-card {
+    padding: 2rem 1.6rem;
+    border-top: 2px solid rgba(217,165,165,0.2);
+    transition: border-color .3s;
+  }
+  .bene-card:hover { border-color: var(--accent); }
+  .bene-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem; color: rgba(217,165,165,0.2); font-weight: 700;
+    line-height: 1; margin-bottom: .8rem;
+  }
+  .bene-card h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; color: var(--light); margin-bottom: .5rem;
+  }
+  .bene-card p { font-size: .84rem; color: var(--mid); line-height: 1.7; }
+
+  /* ── FAQ ── */
+  #faq { background: var(--black); }
+  .faq-inner { max-width: 760px; margin: 0 auto; }
+  .faq-header { margin-bottom: 3rem; }
+  .faq-item {
+    border-bottom: 1px solid rgba(191,191,191,0.12);
+    overflow: hidden;
+  }
+  .faq-q {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.4rem 0; cursor: pointer;
+    font-size: .96rem; color: var(--light);
+    background: none; border: none; width: 100%; text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    transition: color .25s;
+  }
+  .faq-q:hover { color: var(--accent); }
+  .faq-icon { font-size: 1.3rem; color: var(--accent); transition: transform .3s; flex-shrink: 0; }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+  .faq-a {
+    max-height: 0; overflow: hidden;
+    font-size: .88rem; color: var(--mid); line-height: 1.75;
+    transition: max-height .4s ease, padding .3s;
+  }
+  .faq-item.open .faq-a { max-height: 200px; padding-bottom: 1.2rem; }
+
+  /* ── CONTACTO ── */
+  #contacto { background: var(--dark); }
+  .contacto-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start;
+  }
+  .contacto-info h2 { margin-bottom: 1.4rem; }
+  .contacto-item {
+    display: flex; align-items: flex-start; gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .contacto-icon { font-size: 1.3rem; margin-top: .1rem; }
+  .contacto-item strong { display: block; font-size: .82rem; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: .2rem; }
+  .contacto-item span { font-size: .9rem; color: var(--mid); }
+  .whatsapp-btn {
+    display: inline-flex; align-items: center; gap: .8rem;
+    padding: 1rem 2rem; background: #25D366; color: #fff;
+    font-family: 'DM Sans', sans-serif; font-size: .85rem; letter-spacing: .08em;
+    text-transform: uppercase; border: none; cursor: pointer;
+    text-decoration: none; border-radius: 2px; margin-top: 1.6rem;
+    transition: opacity .25s, transform .2s;
+  }
+  .whatsapp-btn:hover { opacity: .88; transform: translateY(-2px); }
+
+  .contacto-form { display: flex; flex-direction: column; gap: 1.1rem; }
+  .form-group { display: flex; flex-direction: column; gap: .4rem; }
+  .form-group label { font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--mid); }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    background: rgba(28,28,28,.7); border: 1px solid rgba(191,191,191,0.18);
+    color: var(--light); font-family: 'DM Sans', sans-serif; font-size: .9rem;
+    padding: .85rem 1rem; border-radius: 2px; outline: none;
+    transition: border-color .25s; resize: none;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus { border-color: var(--accent); }
+  .form-group select option { background: var(--dark); }
+  .form-submit {
+    padding: .9rem 2rem; background: var(--accent); color: var(--black);
+    font-family: 'DM Sans', sans-serif; font-size: .82rem; letter-spacing: .1em;
+    text-transform: uppercase; border: none; cursor: pointer; border-radius: 2px;
+    transition: opacity .25s; align-self: flex-start;
+  }
+  .form-submit:hover { opacity: .88; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black); border-top: 1px solid rgba(191,191,191,0.1);
+    padding: 3rem 5%; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: gap;
+    gap: 1.5rem;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-weight: 700; color: var(--light);
+  }
+  .footer-logo span { color: var(--accent); }
+  .footer-copy { font-size: .78rem; color: var(--mid); }
+  .footer-links { display: flex; gap: 1.6rem; }
+  .footer-links a { font-size: .78rem; color: var(--mid); text-decoration: none; transition: color .25s; }
+  .footer-links a:hover { color: var(--accent); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .nav-links, .nav-cta { display: none; }
+    .burger { display: flex; }
+    .hero-grid, .sobre-grid, .beneficios-header,
+    .contacto-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .planes-grid { grid-template-columns: 1fr; }
+    .beneficios-grid { grid-template-columns: 1fr 1fr; }
+    .hero-visual { order: -1; }
+    .hero-plate { width: min(300px, 70vw); font-size: 5rem; }
+    .sobre-visual { grid-template-columns: 1fr 1fr; }
+    .plan-custom { flex-direction: column; }
+    footer { flex-direction: column; text-align: center; }
+    .footer-links { justify-content: center; }
+  }
+  @media (max-width: 560px) {
+    section { padding: 5rem 5%; }
+    .beneficios-grid { grid-template-columns: 1fr; }
+    .sobre-visual { grid-template-columns: 1fr; }
+    .sobre-card:nth-child(2), .sobre-card:nth-child(4) { margin-top: 0; }
+    .hero-btns { flex-direction: column; }
+    .btn-primary, .btn-outline { text-align: center; }
+  }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#inicio" class="logo">MACELI <span>·</span></a>
+  <ul class="nav-links">
+    <li><a href="#inicio">Inicio</a></li>
+    <li><a href="#sobre">Sobre nosotros</a></li>
+    <li><a href="#planes">Planes</a></li>
+    <li><a href="#beneficios">Beneficios</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="#planes" class="nav-cta">Ver planes</a>
+  <div class="burger" onclick="openMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="closeMenu()">✕</button>
+  <a href="#inicio" onclick="closeMenu()">Inicio</a>
+  <a href="#sobre" onclick="closeMenu()">Sobre nosotros</a>
+  <a href="#planes" onclick="closeMenu()">Planes</a>
+  <a href="#beneficios" onclick="closeMenu()">Beneficios</a>
+  <a href="#faq" onclick="closeMenu()">Preguntas frecuentes</a>
+  <a href="#contacto" onclick="closeMenu()">Contacto</a>
+</div>
+
+<!-- HERO -->
+<section id="inicio">
+  <div class="hero-bg"></div>
+  <div class="hero-grid">
+    <div class="hero fade-up">
+      <span class="hero-tag">Dark Kitchen · Arequipa, Perú</span>
+      <h1>Come bien.<br>Vive <em>mejor.</em></h1>
+      <p>Planes de comida saludable, deliciosa y personalizada. Delivery directo a tu puerta, sin excusas para comer mal.</p>
+      <div class="hero-btns">
+        <a href="#planes" class="btn-primary">Ver planes</a>
+        <a href="https://wa.me/51999999999?text=Hola%20MACELI%2C%20quiero%20información%20sobre%20sus%20planes" target="_blank" class="btn-outline">Pedir por WhatsApp</a>
+      </div>
+    </div>
+    <div class="hero-visual fade-up">
+      <div class="hero-plate"><img src="logo.png" alt="MACELI" style="width:65%;border-radius:50%;"></div>
+      <div class="hero-badge">
+        <strong>100%</strong>
+        <span>Natural & fresco</span>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-line">Scroll</div>
+</section>
+
+<!-- SOBRE MACELI -->
+<section id="sobre">
+  <div class="sobre-grid">
+    <div class="fade-up">
+      <p class="section-label">Quiénes somos</p>
+      <h2 class="section-title">Alimentación que transforma vidas</h2>
+      <div class="divider"></div>
+      <p class="section-sub">En MACELI – Eat Fit rompemos el estigma de que lo saludable es aburrido. Somos una dark kitchen especializada en comidas balanceadas, nutritivas y con sabor real.</p>
+      <div class="valores-list">
+        <div class="valor-item"><span class="valor-dot"></span>Honestidad en cada ingrediente y proceso</div>
+        <div class="valor-item"><span class="valor-dot"></span>Innovación continua en recetas y servicios</div>
+        <div class="valor-item"><span class="valor-dot"></span>Puntualidad garantizada en cada entrega</div>
+        <div class="valor-item"><span class="valor-dot"></span>Cercanía y trato personalizado</div>
+        <div class="valor-item"><span class="valor-dot"></span>Compromiso con la sostenibilidad</div>
+      </div>
+    </div>
+    <div class="sobre-visual fade-up">
+      <div class="sobre-card">
+        <div class="sobre-icon">🎯</div>
+        <h4>Misión</h4>
+        <p>Comida saludable y deliciosa de forma práctica, dejando una huella de sabor, calidad y bienestar.</p>
+      </div>
+      <div class="sobre-card">
+        <div class="sobre-icon">🚀</div>
+        <h4>Visión</h4>
+        <p>Ser la marca líder en comida saludable en Perú, inspirando una nueva generación de hábitos conscientes.</p>
+      </div>
+      <div class="sobre-card">
+        <div class="sobre-icon">🥦</div>
+        <h4>Nutrición personalizada</h4>
+        <p>Planes diseñados según tus objetivos con asesoramiento nutricional especializado.</p>
+      </div>
+      <div class="sobre-card">
+        <div class="sobre-icon">🛵</div>
+        <h4>Delivery puntual</h4>
+        <p>Tu comida lista y fresca, entregada a tiempo donde la necesites.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLANES -->
+<section id="planes">
+  <div class="planes-header fade-up">
+    <p class="section-label">Nuestros planes</p>
+    <h2 class="section-title">Elige tu plan saludable</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Planes flexibles adaptados a tu estilo de vida. Sin complicaciones, con sabor y bienestar garantizado.</p>
+  </div>
+  <div class="planes-grid fade-up">
+
+    <div class="plan-card">
+      <div class="plan-icon">🥗</div>
+      <div class="plan-name">Plan Diario</div>
+      <div class="plan-desc">Ideal para probar MACELI sin compromiso. Una jornada completa de comida balanceada.</div>
+      <div class="plan-price">S/. 35</div>
+      <div class="plan-price-label">por día · 3 comidas</div>
+      <ul class="plan-features">
+        <li>Desayuno, almuerzo y cena</li>
+        <li>Ingredientes frescos del día</li>
+        <li>Delivery incluido</li>
+        <li>Sin suscripción</li>
+      </ul>
+      <a href="https://wa.me/51999999999?text=Quiero%20el%20Plan%20Diario%20de%20MACELI" target="_blank" class="plan-btn">Pedir ahora</a>
+    </div>
+
+    <div class="plan-card featured">
+      <div class="plan-badge-top">⭐ Más popular</div>
+      <div class="plan-icon">🍱</div>
+      <div class="plan-name">Plan Semanal</div>
+      <div class="plan-desc">La opción más elegida. Siete días de alimentación consciente con ahorro garantizado.</div>
+      <div class="plan-price">S/. 200</div>
+      <div class="plan-price-label">por semana · 3 comidas/día</div>
+      <ul class="plan-features">
+        <li>21 comidas balanceadas</li>
+        <li>Menú variado sin repetición</li>
+        <li>Delivery diario incluido</li>
+        <li>Asesoría nutricional básica</li>
+        <li>Ajuste por objetivos</li>
+      </ul>
+      <a href="https://wa.me/51999999999?text=Quiero%20el%20Plan%20Semanal%20de%20MACELI" target="_blank" class="plan-btn">Pedir ahora</a>
+    </div>
+
+    <div class="plan-card">
+      <div class="plan-icon">👨‍👩‍👧</div>
+      <div class="plan-name">Plan Familiar</div>
+      <div class="plan-desc">Alimentación saludable para toda la familia. Personalizado por miembro y necesidad.</div>
+      <div class="plan-price">S/. 550</div>
+      <div class="plan-price-label">por semana · hasta 4 personas</div>
+      <ul class="plan-features">
+        <li>Hasta 4 personas</li>
+        <li>Menús personalizados por miembro</li>
+        <li>Delivery unificado</li>
+        <li>Asesoría nutricional familiar</li>
+        <li>Ajuste por alergias o restricciones</li>
+      </ul>
+      <a href="https://wa.me/51999999999?text=Quiero%20el%20Plan%20Familiar%20de%20MACELI" target="_blank" class="plan-btn">Pedir ahora</a>
+    </div>
+
+  </div>
+
+  <div class="plan-custom fade-up">
+    <div>
+      <h3>¿Necesitas algo más específico?</h3>
+      <p>Diseñamos un plan 100% a medida según tus objetivos: pérdida de peso, masa muscular, planes especializados o restricciones alimentarias.</p>
+    </div>
+    <a href="https://wa.me/51999999999?text=Quiero%20un%20plan%20personalizado%20de%20MACELI" target="_blank" class="btn-primary">Consultar plan personalizado</a>
+  </div>
+</section>
+
+<!-- BENEFICIOS -->
+<section id="beneficios">
+  <div class="beneficios-inner">
+    <div class="beneficios-header">
+      <div class="fade-up">
+        <p class="section-label">Por qué elegirnos</p>
+        <h2 class="section-title">Beneficios que marcan la diferencia</h2>
+        <div class="divider"></div>
+      </div>
+      <p class="section-sub fade-up">No solo vendemos comida. Ofrecemos un cambio de estilo de vida con el respaldo de nutrición real y sabor auténtico.</p>
+    </div>
+    <div class="beneficios-grid">
+      <div class="bene-card fade-up">
+        <div class="bene-num">01</div>
+        <h4>Sin conservantes</h4>
+        <p>Preparación diaria con ingredientes frescos, sin aditivos artificiales ni conservantes.</p>
+      </div>
+      <div class="bene-card fade-up">
+        <div class="bene-num">02</div>
+        <h4>Personalización real</h4>
+        <p>Cada plan adaptado a tus objetivos, preferencias y necesidades nutricionales específicas.</p>
+      </div>
+      <div class="bene-card fade-up">
+        <div class="bene-num">03</div>
+        <h4>Delivery puntual</h4>
+        <p>Tu comida llega cuando la necesitas. Puntualidad como valor, no como promesa vacía.</p>
+      </div>
+      <div class="bene-card fade-up">
+        <div class="bene-num">04</div>
+        <h4>Ahorro de tiempo</h4>
+        <p>Olvídate de planificar, comprar y cocinar. Nosotros lo hacemos por ti.</p>
+      </div>
+      <div class="bene-card fade-up">
+        <div class="bene-num">05</div>
+        <h4>Sabor garantizado</h4>
+        <p>Lo saludable no tiene que ser insípido. Recetas deliciosas que querrás repetir.</p>
+      </div>
+      <div class="bene-card fade-up">
+        <div class="bene-num">06</div>
+        <h4>Asesoría incluida</h4>
+        <p>Orientación nutricional en planes especializados para alcanzar tus metas con información real.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="faq-inner">
+    <div class="faq-header fade-up">
+      <p class="section-label">Preguntas frecuentes</p>
+      <h2 class="section-title">Todo lo que necesitas saber</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="faq-item fade-up">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        ¿Cómo funciona el servicio de delivery?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Realizamos entregas diarias según el plan contratado. Coordinamos el horario y punto de entrega contigo al momento de confirmar tu pedido. Cubrimos las principales zonas de Arequipa.</div>
+    </div>
+
+    <div class="faq-item fade-up">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        ¿Puedo cambiar mi plan una vez contratado?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Sí. Entendemos que las necesidades cambian. Puedes ajustar tu plan comunicándote con nosotros por WhatsApp con 24 horas de anticipación.</div>
+    </div>
+
+    <div class="faq-item fade-up">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        ¿Trabajan con alergias o restricciones alimentarias?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Absolutamente. Indicamos todos los alérgenos en nuestros menús y podemos adaptar las preparaciones a restricciones como intolerancia al gluten, lactosa, dietas vegetarianas o veganas, entre otras.</div>
+    </div>
+
+    <div class="faq-item fade-up">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        ¿Cómo se realiza el pago?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Aceptamos pagos por transferencia bancaria, Yape, Plin y efectivo. Los planes son prepagados para garantizar la frescura y organización de cada entrega.</div>
+    </div>
+
+    <div class="faq-item fade-up">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        ¿Con cuánta anticipación debo hacer mi pedido?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Recomendamos coordinar con al menos 24 horas de anticipación para garantizar disponibilidad y la mejor preparación de tus comidas.</div>
+    </div>
+
+    <div class="faq-item fade-up">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        ¿Los planes incluyen asesoría nutricional?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Los planes semanales, familiares y personalizados incluyen orientación nutricional básica. Para planes especializados (pérdida de peso, aumento de masa muscular), ofrecemos asesoramiento más detallado.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="contacto-inner">
+    <div class="fade-up">
+      <p class="section-label">Contáctanos</p>
+      <h2 class="section-title">Hablemos de tu plan ideal</h2>
+      <div class="divider"></div>
+      <p class="section-sub">Estamos para ayudarte a encontrar la mejor opción. Escríbenos y te respondemos rápido.</p>
+
+      <div style="margin-top: 2.5rem;">
+        <div class="contacto-item">
+          <span class="contacto-icon"></span>
+          <div>
+            <strong>Ubicación</strong>
+            <span>Arequipa, Perú · Dark Kitchen</span>
+          </div>
+        </div>
+        <div class="contacto-item">
+          <span class="contacto-icon"></span>
+          <div>
+            <strong>WhatsApp</strong>
+            <span>+51 999 999 999</span>
+          </div>
+        </div>
+        <div class="contacto-item">
+          <span class="contacto-icon"></span>
+          <div>
+            <strong>Email</strong>
+            <span>hola@maceli.pe</span>
+          </div>
+        </div>
+        <div class="contacto-item">
+          <span class="contacto-icon"></span>
+          <div>
+            <strong>Horario de atención</strong>
+            <span>Lunes a Sábado · 7:00 am – 8:00 pm</span>
+          </div>
+        </div>
+      </div>
+
+      <a href="https://wa.me/51999999999?text=Hola%20MACELI%2C%20quiero%20información" target="_blank" class="whatsapp-btn">
+        <span>☎️</span> Pedir por WhatsApp
+      </a>
+    </div>
+
+    <div class="fade-up">
+      <div class="contacto-form">
+        <div class="form-group">
+          <label>Nombre completo</label>
+          <input type="text" placeholder="Tu nombre">
+        </div>
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input type="email" placeholder="tu@correo.com">
+        </div>
+        <div class="form-group">
+          <label>Teléfono / WhatsApp</label>
+          <input type="tel" placeholder="+51 999 999 999">
+        </div>
+        <div class="form-group">
+          <label>Plan de interés</label>
+          <select>
+            <option value="">Selecciona un plan</option>
+            <option>Plan Diario</option>
+            <option>Plan Semanal</option>
+            <option>Plan Familiar</option>
+            <option>Plan Personalizado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Mensaje</label>
+          <textarea rows="4" placeholder="Cuéntanos tus objetivos o restricciones alimentarias..."></textarea>
+        </div>
+        <button class="form-submit" onclick="handleSubmit(event)">Enviar mensaje</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">MACELI <span>·</span> Eat Fit</div>
+  <p class="footer-copy">© 2025 MACELI – Eat Fit · Arequipa, Perú</p>
+  <div class="footer-links">
+    <a href="#inicio">Inicio</a>
+    <a href="#planes">Planes</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu
+  function openMenu() { document.getElementById('mobileMenu').classList.add('open'); }
+  function closeMenu() { document.getElementById('mobileMenu').classList.remove('open'); }
+
+  // FAQ accordion
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  }
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target;
+    btn.textContent = '✓ ¡Mensaje enviado!';
+    btn.style.background = '#4CAF50';
+    setTimeout(() => { btn.textContent = 'Enviar mensaje'; btn.style.background = ''; }, 3000);
+  }
+</script>
+</body>
+</html>
